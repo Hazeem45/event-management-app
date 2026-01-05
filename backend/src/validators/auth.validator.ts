@@ -16,3 +16,12 @@ export const registerSchema = z.object({
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>["body"];
+
+export const loginSchema = z.object({
+  body: z.object({
+    identifier: z.string().min(1, "Identifier is required"),
+    password: z.string().min(1, "Password is required"),
+  }),
+});
+
+export type LoginInput = z.infer<typeof loginSchema>["body"];

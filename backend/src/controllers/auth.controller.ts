@@ -1,22 +1,49 @@
 import { Request, Response } from "express";
-import { RegisterInput } from "../validators/auth.validator";
+import { LoginInput, RegisterInput } from "../validators/auth.validator";
 import { UserModel } from "../models/user.model";
 
 export default {
   async register(req: Request<{}, {}, RegisterInput>, res: Response) {
     const { fullName, username, email, password } = req.body;
 
-    try {
-      const result = await UserModel.create({
-        fullName,
-        username,
-        email,
-        password,
+    const result = await UserModel.create({
+      fullName,
+      username,
+      email,
+      password,
+    });
+    res.status(200).json({
+      message: "Success Registration!",
+      data: result,
+    });
+  },
+
+  async login(req: Request<{}, {}, LoginInput>, res: Response) {
+    const { identifier, password } = req.body;
+
+    const existedUser = await UserModel.findOne({
+      $or: [{ email: identifier }, { username: identifier }],
+    }).select("+password");
+
+    if (!existedUser) {
+      return res.status(403).json({
+        message: "Invalid credentials",
+        data: null,
       });
-      res.status(200).json({
-        message: "Success Registration!",
-        data: result,
+    }
+
+    const isMatch = await existedUser.comparePassword(password);
+
+    if (!isMatch) {
+      return res.status(403).json({
+        message: "Invalid credentials",
+        data: null,
       });
-    } catch (error) {}
+    }
+
+    return res.status(200).json({
+      message: "Login success",
+      data: existedUser,
+    });
   },
 };
