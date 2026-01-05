@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 export const connectDB = async (): Promise<any> => {
   try {
-    const result = await mongoose.connect(process.env.MONGO_URI as string, {
-      dbName: "event-management-db",
+    await mongoose.connect(process.env.MONGO_URI as string, {
+      dbName: "event_management_db",
     });
 
     return Promise.resolve("MongoDB connected!");

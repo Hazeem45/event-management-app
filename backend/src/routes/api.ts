@@ -1,8 +1,10 @@
 import { Router } from "express";
-import dummyController from "../controllers/dummy.controller";
+import authController from "../controllers/auth.controller";
+import { validate } from "../middlewares/validate";
+import { registerSchema } from "../validators/auth.validator";
 
 const router = Router();
 
-router.get("/dummy", dummyController.dummy);
+router.post("/register", validate(registerSchema), authController.register);
 
 export default router;
