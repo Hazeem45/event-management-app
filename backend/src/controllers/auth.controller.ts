@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { LoginInput, RegisterInput } from "../validators/auth.validator";
 import { UserModel } from "../models/user.model";
+import { generateToken } from "../services/jwt.service";
+import { IRequestUser } from "../types/request";
 
 export default {
   async register(req: Request<{}, {}, RegisterInput>, res: Response) {
@@ -41,9 +43,29 @@ export default {
       });
     }
 
+    const token = generateToken({
+      sub: existedUser._id,
+      role: existedUser.role,
+    });
+
     return res.status(200).json({
       message: "Login success",
-      data: existedUser,
+      data: token,
+    });
+  },
+
+  async me(req: IRequestUser, res: Response) {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    const id = user.sub;
+    const result = await UserModel.findById(id);
+
+    return res.status(200).json({
+      message: "User data",
+      data: result,
     });
   },
 };
