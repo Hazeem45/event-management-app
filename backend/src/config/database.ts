@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
+import env from "./env";
 
 export const connectDB = async (): Promise<any> => {
   try {
-    await mongoose.connect(process.env.MONGO_URI as string, {
+    await mongoose.connect(env.MONGO_URI, {
       dbName: "event_management_db",
     });
 

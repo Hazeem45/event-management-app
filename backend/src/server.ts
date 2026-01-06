@@ -1,7 +1,8 @@
 import app from "./index";
 import { connectDB } from "./config/database";
+import env from "./config/env";
 
-const PORT = process.env.PORT || 3000;
+const PORT = env.PORT;
 
 const startServer = async () => {
   try {
@@ -12,7 +13,7 @@ const startServer = async () => {
       console.log(`Server is running on http://localhost:${PORT}`);
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
