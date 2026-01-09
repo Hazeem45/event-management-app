@@ -1,15 +1,39 @@
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 import env from "../config/env";
-import { JwtPayload, JwtUser } from "../types/jwt";
+import { JwtMeta, JwtPayloadMap } from "../types/jwt";
 
-export const generateToken = (user: JwtUser): string => {
-  const token = jwt.sign(user, env.SECRET_KEY, {
-    expiresIn: "10h",
-  });
-  return token;
+export type TokenType = keyof JwtPayloadMap;
+
+type GenerateTokenInput<T extends TokenType> = {
+  type: T;
+  payload: JwtPayloadMap[T];
+  options?: SignOptions;
 };
 
-export const getUserData = (token: string) => {
-  const user = jwt.verify(token, env.SECRET_KEY) as JwtPayload;
-  return user;
+const getJwtSecret = (type: TokenType): string => {
+  switch (type) {
+    case "access":
+      return env.JWT_ACCESS_SECRET;
+    case "email":
+      return env.JWT_EMAIL_SECRET;
+    default:
+      throw new Error("Invalid token type");
+  }
+};
+
+export const generateToken = <T extends TokenType>({
+  type,
+  payload,
+  options,
+}: GenerateTokenInput<T>): string => {
+  const secret = getJwtSecret(type);
+  return jwt.sign(payload, secret, options);
+};
+
+export const verifyToken = <T extends TokenType>(
+  type: T,
+  token: string
+): JwtPayloadMap[T] & JwtMeta => {
+  const secret = getJwtSecret(type);
+  return jwt.verify(token, secret) as JwtPayloadMap[T] & JwtMeta;
 };

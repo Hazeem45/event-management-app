@@ -1,11 +1,24 @@
 import { Types } from "mongoose";
-import { UserDocument } from "../models/user.model";
+import { UserRole } from "../models/user.model";
 
-export type JwtUser = Pick<UserDocument, "role"> & {
+export interface BaseJwtSubject {
   sub: Types.ObjectId | string;
+}
+
+export interface AccessTokenPayload extends BaseJwtSubject {
+  role: UserRole;
+}
+
+export interface EmailVerificationPayload extends BaseJwtSubject {
+  email: string;
+}
+
+export type JwtPayloadMap = {
+  access: AccessTokenPayload;
+  email: EmailVerificationPayload;
 };
 
-export interface JwtPayload extends JwtUser {
+export interface JwtMeta {
   iat: number;
   exp: number;
 }

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { LoginInput, RegisterInput } from "../validators/auth.validator";
 import { UserModel } from "../models/user.model";
 import { generateToken } from "../services/jwt.service";
-import { IRequestUser } from "../types/request";
+import { AuthenticatedRequest } from "../types/request";
 
 export default {
   async register(req: Request<{}, {}, RegisterInput>, res: Response) {
@@ -43,18 +43,22 @@ export default {
       });
     }
 
-    const token = generateToken({
-      sub: existedUser._id,
-      role: existedUser.role,
+    const accessToken = generateToken({
+      type: "access",
+      payload: {
+        sub: existedUser._id,
+        role: existedUser.role,
+      },
+      options: { expiresIn: "10m" },
     });
 
     return res.status(200).json({
       message: "Login success",
-      data: token,
+      data: accessToken,
     });
   },
 
-  async me(req: IRequestUser, res: Response) {
+  async me(req: AuthenticatedRequest, res: Response) {
     const user = req.user;
     if (!user) {
       return res.status(401).json({ message: "User not found" });

@@ -5,13 +5,15 @@ dotenv.config();
 interface EnvVariables {
   PORT: number;
   MONGO_URI: string;
-  SECRET_KEY: string;
+  JWT_ACCESS_SECRET: string;
+  JWT_EMAIL_SECRET: string;
 }
 
 const env: EnvVariables = {
   PORT: Number(process.env.PORT) || 3000,
   MONGO_URI: process.env.MONGO_URI || "",
-  SECRET_KEY: process.env.SECRET_KEY || "",
+  JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || "",
+  JWT_EMAIL_SECRET: process.env.JWT_EMAIL_SECRET || "",
 };
 
 export default env;

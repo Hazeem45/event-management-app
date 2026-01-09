@@ -5,6 +5,8 @@ interface UserMethods {
   comparePassword(password: string): Promise<boolean>;
 }
 
+const USER_ROLES = ["admin", "user"] as const;
+
 const UserSchema = new Schema(
   {
     fullName: {
@@ -26,7 +28,7 @@ const UserSchema = new Schema(
     },
     role: {
       type: Schema.Types.String,
-      enum: ["admin", "user"],
+      enum: USER_ROLES,
       default: "user",
     },
     profilePicture: {
@@ -64,6 +66,8 @@ UserSchema.set("toJSON", {
     return rest;
   },
 });
+
+export type UserRole = (typeof USER_ROLES)[number];
 
 export type UserDocument = InferSchemaType<typeof UserSchema> & UserMethods;
 
