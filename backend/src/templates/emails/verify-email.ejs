@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ACARA - Activate Account</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: lightgrey;
+      }
+      .container {
+        max-width: 500px;
+        margin: 5px auto;
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px -15px black;
+      }
+      .header {
+        background-color: #ff3b3b;
+        color: lightgrey;
+        padding: 20px;
+        text-align: center;
+      }
+      .content {
+        padding: 20px;
+        text-align: start;
+      }
+      .content ul {
+        text-align: start;
+        list-style: none;
+        margin-bottom: 25px;
+      }
+      .content .group-verify {
+        text-align: center;
+      }
+      .content a.button-verif {
+        font-family: "Courier New", Courier, monospace;
+        font-size: 14px;
+        padding: 10px 16px;
+        background-color: green;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 7px;
+        margin: 0 auto;
+      }
+      .content p.valid-time {
+        color: red;
+        font-size: 12px;
+        margin: 20px 25px 0;
+      }
+      .footer {
+        background-color: darkslateblue;
+        color: lightgrey;
+        padding: 10px;
+        font-size: 12px;
+        text-align: center;
+      }
+      @media (max-width: 500px) {
+        .container {
+          max-width: 100%;
+          margin: 0;
+          border-radius: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header"><h1>Wellcome!</h1></div>
+      <div class="content">
+        <p>Hello <%= username %>,</p>
+        <p>
+          We appreciate you joining our service. Here is your account
+          information:
+        </p>
+        <ul>
+          <li>
+            <span style="font-weight: bolder">Name :</span
+            ><span> <%= fullName %></span>
+          </li>
+          <li>
+            <span style="font-weight: bolder">Email :</span
+            ><span> <%= email %></span>
+          </li>
+          <li>
+            <span style="font-weight: bolder">Registration Date :</span
+            ><span> <%= createdAt %></span>
+          </li>
+        </ul>
+        <p>
+          To verify your email address and activate your account, please click
+          the button below:
+        </p>
+        <div class="group-verify">
+          <a href="<%= verifyUrl %>" class="button-verif">Activate Account</a>
+          <p class="valid-time">
+            This link is valid for <%= expiresIn %> minutes.
+          </p>
+        </div>
+        <p>If you have any questions, please do not hesitate to contact us.</p>
+        <p>Best regards, ACARA</p>
+      </div>
+      <div class="footer">
+        <p>&copy; 2026 ACARA Event Management App. All Right Reserved</p>
+      </div>
+    </div>
+  </body>
+</html>
