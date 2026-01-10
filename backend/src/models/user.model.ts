@@ -42,6 +42,9 @@ const UserSchema = new Schema(
     activationCode: {
       type: Schema.Types.String,
     },
+    activationCodeExpiresAt: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
@@ -66,6 +69,8 @@ UserSchema.set("toJSON", {
     return rest;
   },
 });
+
+UserSchema.index({ activationCode: 1 });
 
 export type UserRole = (typeof USER_ROLES)[number];
 

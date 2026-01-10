@@ -12,6 +12,7 @@ router.post(
   authController.register
 );
 router.post("/auth/login", validate(loginSchema), authController.login);
+router.post("/auth/activation", authController.activation);
 router.get("/auth/me", authMiddleware, authController.me);
 
 export default router;
