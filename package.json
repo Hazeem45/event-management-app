@@ -1,7 +1,0 @@
-{
-  "name": "event-management-app",
-  "private": true,
-  "workspaces": [
-    "backend"
-  ]
-}
