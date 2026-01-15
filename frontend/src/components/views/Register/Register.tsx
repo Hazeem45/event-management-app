@@ -8,30 +8,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { FloatingLabelInput } from "@/components/ui/InputFloatingLabel";
-import { RegisterFormValues, registerSchema } from "@/lib/validators";
-import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
 import useRegister from "./useRegister";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/lib/utils";
 
 const Register = () => {
-  const { isPasswordVisible, handleChangeVisiblePassword } = useRegister();
-  const form = useForm<RegisterFormValues>({
-    resolver: zodResolver(registerSchema),
-    defaultValues: {
-      fullname: "",
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-  });
-
-  function onSubmit(values: RegisterFormValues) {
-    console.log(values);
-  }
+  const {
+    isPasswordVisible,
+    handleChangeVisiblePassword,
+    handleRegister,
+    isPendingRegister,
+    form,
+  } = useRegister();
+  const err = form.formState.errors;
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-10 lg:flex-row lg:gap-20">
@@ -47,6 +39,7 @@ const Register = () => {
           alt="logo"
           width={1024}
           height={1024}
+          loading="eager"
           className="w-2/3 lg:w-full"
         />
       </div>
@@ -66,24 +59,31 @@ const Register = () => {
           </p>
         </CardHeader>
 
+        {err.root && (
+          <p className="text-destructive font-medium">{err?.root?.message}</p>
+        )}
+
         <CardContent className="px-0">
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex w-80 flex-col gap-4"
+              onSubmit={form.handleSubmit(handleRegister)}
+              className={cn(
+                "flex w-80 flex-col",
+                Object.keys(err).length > 0 ? "gap-2" : "gap-4",
+              )}
             >
-              {/* Fullname */}
+              {/* fullName */}
               <FormField
                 control={form.control}
-                name="fullname"
+                name="fullName"
                 render={({ field }) => (
                   <FormItem className="mb-0 gap-0">
                     <FormControl>
                       <FloatingLabelInput
                         label="Fullname"
-                        {...field}
                         className="h-14 rounded-[12px] px-2 py-3 text-sm"
                         labelClass="text-sm"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -100,9 +100,9 @@ const Register = () => {
                     <FormControl>
                       <FloatingLabelInput
                         label="Username"
-                        {...field}
                         className="h-14 rounded-[12px] px-2 py-3 text-sm"
                         labelClass="text-sm"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -120,9 +120,9 @@ const Register = () => {
                       <FloatingLabelInput
                         label="Email"
                         type="email"
-                        {...field}
                         className="h-14 rounded-[12px] px-2 py-3 text-sm"
                         labelClass="text-sm"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -140,7 +140,6 @@ const Register = () => {
                       <FloatingLabelInput
                         label="Password"
                         type={isPasswordVisible.password ? "text" : "password"}
-                        {...field}
                         className="h-14 rounded-[12px] px-2 py-3 text-sm"
                         labelClass="text-sm"
                         endContent={
@@ -159,6 +158,7 @@ const Register = () => {
                             )}
                           </Button>
                         }
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -180,7 +180,6 @@ const Register = () => {
                             ? "text"
                             : "password"
                         }
-                        {...field}
                         className="h-14 rounded-[12px] px-2 py-3 text-sm"
                         labelClass="text-sm"
                         endContent={
@@ -199,6 +198,7 @@ const Register = () => {
                             )}
                           </Button>
                         }
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -207,10 +207,18 @@ const Register = () => {
               />
 
               <Button
+                disabled={isPendingRegister}
                 type="submit"
-                className="h-12 w-full rounded-xl text-base"
+                className="disabled:bg-primary/90 h-12 w-full cursor-pointer rounded-xl text-base disabled:cursor-none"
               >
-                Register
+                {isPendingRegister ? (
+                  <>
+                    <Spinner className="size-5 animate-spin" />
+                    Please wait
+                  </>
+                ) : (
+                  "Register"
+                )}
               </Button>
             </form>
           </Form>
