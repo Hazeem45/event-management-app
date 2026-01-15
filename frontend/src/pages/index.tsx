@@ -1,4 +1,4 @@
-import PageHead from "@/components/common/PageHead";
+import PageHead from "@/components/commons/PageHead";
 import { Button } from "@/components/ui/button";
 import { Geist, Geist_Mono } from "next/font/google";
 
