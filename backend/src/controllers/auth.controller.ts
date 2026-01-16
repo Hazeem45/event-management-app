@@ -115,10 +115,8 @@ export default {
         message: "Activation token is required",
       });
     }
-    console.log(token);
 
     const payload = verifyToken("email", token);
-    console.log("payload", payload);
 
     if (!payload) {
       return res.status(400).json({
