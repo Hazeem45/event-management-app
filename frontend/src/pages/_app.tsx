@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
 
@@ -18,17 +19,22 @@ const queryClient = new QueryClient({
   },
 });
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <main
-        className={cn(
-          inter.className,
-          "lg:0 flex min-h-screen min-w-full flex-col items-center justify-center gap-10 py-10",
-        )}
-      >
-        <Component {...pageProps} />
-      </main>
-    </QueryClientProvider>
+    <SessionProvider session={session}>
+      <QueryClientProvider client={queryClient}>
+        <main
+          className={cn(
+            inter.className,
+            "lg:0 flex min-h-screen min-w-full flex-col items-center justify-center gap-10 py-10",
+          )}
+        >
+          <Component {...pageProps} />
+        </main>
+      </QueryClientProvider>
+    </SessionProvider>
   );
 }
