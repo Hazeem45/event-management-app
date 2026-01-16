@@ -1,3 +1,7 @@
+export interface IActivation {
+  token: string;
+}
+
 export interface IRegister {
   fullName: string;
   username: string;
