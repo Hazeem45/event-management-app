@@ -1,7 +1,7 @@
 import AuthLayout from "@/components/layouts/AuthLayout";
 import Login from "@/components/views/Auth/Login";
 
-const RegisterPage = () => {
+const LoginPage = () => {
   return (
     <AuthLayout title="Login | Acara">
       <Login />
@@ -9,4 +9,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default LoginPage;

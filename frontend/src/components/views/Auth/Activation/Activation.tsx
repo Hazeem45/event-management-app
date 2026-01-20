@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { success } from "zod";
 
 interface PropTypes {
   status: "success" | "failed";
