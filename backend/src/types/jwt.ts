@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { UserRole } from "../models/user.model";
+import { UserRole } from "../constants/roles";
 
 export interface BaseJwtSubject {
   sub: Types.ObjectId | string;

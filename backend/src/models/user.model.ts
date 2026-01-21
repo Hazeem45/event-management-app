@@ -1,11 +1,10 @@
 import { InferSchemaType, model, Schema } from "mongoose";
 import bcrypt from "bcrypt";
+import { USER_ROLE_VALUES, USER_ROLES } from "../constants/roles";
 
 interface UserMethods {
   comparePassword(password: string): Promise<boolean>;
 }
-
-const USER_ROLES = ["admin", "user"] as const;
 
 const UserSchema = new Schema(
   {
@@ -28,8 +27,8 @@ const UserSchema = new Schema(
     },
     role: {
       type: Schema.Types.String,
-      enum: USER_ROLES,
-      default: "user",
+      enum: USER_ROLE_VALUES,
+      default: USER_ROLES.MEMBER,
     },
     profilePicture: {
       type: Schema.Types.String,
@@ -71,8 +70,6 @@ UserSchema.set("toJSON", {
 });
 
 UserSchema.index({ activationCode: 1 });
-
-export type UserRole = (typeof USER_ROLES)[number];
 
 export type UserDocument = InferSchemaType<typeof UserSchema> & UserMethods;
 
