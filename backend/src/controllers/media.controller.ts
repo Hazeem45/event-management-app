@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { AuthenticatedRequest } from "../types/request";
+import { IRequestExtended } from "../types/request";
 import {
   remove,
   uploadMultiple,
@@ -7,7 +7,7 @@ import {
 } from "../services/media.service";
 
 export default {
-  async single(req: AuthenticatedRequest, res: Response) {
+  async single(req: IRequestExtended, res: Response) {
     if (!req.file) {
       return res.status(400).json({
         message: "File is not exist",
@@ -26,7 +26,7 @@ export default {
     }
   },
 
-  async multiple(req: AuthenticatedRequest, res: Response) {
+  async multiple(req: IRequestExtended, res: Response) {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({
         message: "Files are not exist",
@@ -45,7 +45,7 @@ export default {
     }
   },
 
-  async remove(req: AuthenticatedRequest, res: Response) {
+  async remove(req: IRequestExtended, res: Response) {
     try {
       const { fileUrl } = req.body as { fileUrl: string };
       const result = await remove(fileUrl);

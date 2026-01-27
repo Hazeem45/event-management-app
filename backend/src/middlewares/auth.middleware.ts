@@ -1,12 +1,8 @@
 import { NextFunction, Response } from "express";
 import { verifyToken } from "../services/jwt.service";
-import { AuthenticatedRequest } from "../types/request";
+import { IRequestExtended } from "../types/request";
 
-export default (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-) => {
+export default (req: IRequestExtended, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
 
   if (!authorization) {

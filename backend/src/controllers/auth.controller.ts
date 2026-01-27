@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { LoginInput, RegisterInput } from "../validators/auth.validator";
 import { UserModel } from "../models/user.model";
 import { generateToken, verifyToken } from "../services/jwt.service";
-import { AuthenticatedRequest } from "../types/request";
+import { IRequestExtended } from "../types/request";
 import { renderHtml, sendMail } from "../services/mail.service";
 import { hashData } from "../utils/crypto";
 
@@ -153,7 +153,7 @@ export default {
     });
   },
 
-  async me(req: AuthenticatedRequest, res: Response) {
+  async me(req: IRequestExtended, res: Response) {
     const user = req.user;
     if (!user) {
       return res.status(401).json({ message: "User not found" });
