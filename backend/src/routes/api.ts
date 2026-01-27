@@ -5,6 +5,8 @@ import { loginSchema, registerSchema } from "../validators/auth.validator";
 import authMiddleware from "../middlewares/auth.middleware";
 import aclMiddleware from "../middlewares/acl.middleware";
 import { USER_ROLE_VALUES } from "../constants/roles";
+import mediaMiddleware from "../middlewares/media.middleware";
+import mediaController from "../controllers/media.controller";
 
 const router = Router();
 
@@ -17,16 +19,25 @@ router.post("/auth/login", validate(loginSchema), authController.login);
 router.post("/auth/activation", authController.activation);
 router.get("/auth/me", authMiddleware, authController.me);
 
-router.get(
-  "/test-acl",
+router.post(
+  "/media/upload-single",
   authMiddleware,
   aclMiddleware(USER_ROLE_VALUES),
-  (req, res) => {
-    res.status(200).json({
-      message: "Success",
-      status: "OK",
-    });
-  }
+  mediaMiddleware.single("file"),
+  mediaController.single
+);
+router.post(
+  "/media/upload-multiple",
+  authMiddleware,
+  aclMiddleware(USER_ROLE_VALUES),
+  mediaMiddleware.multiple("files"),
+  mediaController.multiple
+);
+router.delete(
+  "/media/remove",
+  authMiddleware,
+  aclMiddleware(USER_ROLE_VALUES),
+  mediaController.remove
 );
 
 export default router;
