@@ -1,4 +1,4 @@
-type TreeNode = {
+export type TreeNode = {
   errors?: string[];
   properties?: Record<string, TreeNode>;
 };

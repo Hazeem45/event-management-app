@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as z from "zod";
-import { extractZodErrors } from "../utils/zodErrorToObject";
+import response from "../utils/response";
 
 export const validate =
   (schema: z.ZodType<{ body: unknown }>) =>
@@ -12,13 +12,7 @@ export const validate =
     });
 
     if (!result.success) {
-      const tree = z.treeifyError(result.error);
-      const errors = extractZodErrors(tree.properties?.body ?? {});
-
-      return res.status(400).json({
-        message: "Validation failed",
-        errors,
-      });
+      return response.error(res, result.error, "validation error");
     }
 
     next();

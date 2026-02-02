@@ -5,58 +5,52 @@ import {
   uploadMultiple,
   uploadSingle,
 } from "../services/media.service";
+import response from "../utils/response";
 
 export default {
   async single(req: IRequestExtended, res: Response) {
     if (!req.file) {
-      return res.status(400).json({
-        message: "File is not exist",
-      });
+      return response.notFound(res, "file not found");
     }
     try {
       const result = await uploadSingle(req.file as Express.Multer.File);
-      res.status(200).json({
-        message: "Success upload a file",
-        data: result,
-      });
-    } catch {
-      res.status(500).json({
-        message: "Failed upload a file",
-      });
+      response.success(res, result, "success upload a file");
+    } catch (error) {
+      response.error(res, error, "failed upload a file");
     }
   },
 
   async multiple(req: IRequestExtended, res: Response) {
     if (!req.files || req.files.length === 0) {
-      return res.status(400).json({
-        message: "Files are not exist",
-      });
+      return response.notFound(res, "files not found");
     }
     try {
       const result = await uploadMultiple(req.files as Express.Multer.File[]);
-      res.status(200).json({
-        message: "Success upload files",
-        data: result,
-      });
-    } catch {
-      res.status(500).json({
-        message: "Failed upload files",
-      });
+      response.success(res, result, "success upload files");
+    } catch (error) {
+      response.error(res, error, "failed upload files");
     }
   },
 
   async remove(req: IRequestExtended, res: Response) {
+    if (!req.body) {
+      return response.badRequest(res, "request body is required");
+    }
+
+    const { fileUrl } = req.body as { fileUrl: string };
+    if (!fileUrl) {
+      return response.badRequest(res, "fileUrl is required");
+    }
+
     try {
-      const { fileUrl } = req.body as { fileUrl: string };
       const result = await remove(fileUrl);
-      res.status(200).json({
-        message: "Succes remove a file",
-        data: result,
-      });
-    } catch {
-      res.status(500).json({
-        message: "Failed remove file",
-      });
+
+      if (!(result.result === "ok")) {
+        return response.notFound(res, "file not found");
+      }
+      response.success(res, result, "success remove a file");
+    } catch (error) {
+      response.error(res, error, "failed remove file");
     }
   },
 };
