@@ -12,6 +12,7 @@ import {
   createCategorySchema,
   updateCategorySchema,
 } from "../validators/category.validator";
+import regionController from "../controllers/region.controller";
 
 const router = Router();
 
@@ -48,6 +49,20 @@ router.delete(
   aclMiddleware([USER_ROLES.ADMIN]),
   categoryController.remove
 );
+
+// region
+// Get All Provinces
+router.get("/regions/provinces", regionController.getAllProvinces);
+// Get Province by id with Regencies
+router.get("/regions/province/:id", regionController.getProvince);
+// Get Regency by id with Districts
+router.get("/regions/regency/:id", regionController.getRegency);
+// Get District by id with Villages
+router.get("/regions/district/:id", regionController.getDistrict);
+// Get Village by id
+router.get("/regions/village/:id", regionController.getVillage);
+// Get Region by city name
+router.get("/regions/search", regionController.findByCity);
 
 // media
 router.post(
