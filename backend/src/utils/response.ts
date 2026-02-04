@@ -4,11 +4,11 @@ import * as z from "zod";
 import { extractZodErrors, TreeNode } from "./zodErrorToObject";
 import { JsonWebTokenError } from "jsonwebtoken";
 
-// type Pagination = {
-//   totalPages: number;
-//   current: number;
-//   total: number;
-// };
+type Pagination = {
+  totalPages: number;
+  current: number;
+  total: number;
+};
 
 export default {
   success(
@@ -125,19 +125,19 @@ export default {
     });
   },
 
-  // pagination(
-  //   res: Response,
-  //   data: any[],
-  //   pagination: Pagination,
-  //   message: string
-  // ) {
-  //   res.status(200).json({
-  //     meta: {
-  //       status: 200,
-  //       message,
-  //     },
-  //     data,
-  //     pagination,
-  //   });
-  // },
+  pagination(
+    res: Response,
+    data: any[],
+    pagination: Pagination,
+    message: string
+  ) {
+    res.status(200).json({
+      meta: {
+        status: 200,
+        message,
+      },
+      data,
+      pagination,
+    });
+  },
 };
