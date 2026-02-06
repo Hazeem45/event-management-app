@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
 import response from "../utils/response";
-import { categoryZodSchema } from "../schemas/category.zod";
+import { CategoryModel } from "../models/category.model";
+import { IPaginationQuery } from "../types/query";
+import { Types } from "mongoose";
 import {
   CreateCategoryInput,
   UpdateCategoryInput,
 } from "../validators/category.validator";
-import { CategoryModel } from "../models/category.model";
-import { IPaginationQuery } from "../types/query";
-import { Types } from "mongoose";
 
 export default {
   async create(req: Request<{}, {}, CreateCategoryInput>, res: Response) {
@@ -19,7 +18,7 @@ export default {
         description,
         icon,
       });
-      response.success(res, category, "Category created successfully", 201);
+      response.success(res, category, "success created category", 201);
     } catch (error) {
       response.error(res, error, "failed create category");
     }
@@ -64,10 +63,10 @@ export default {
           totalPages: Math.ceil(count / limit),
           current: page,
         },
-        "categories retrieved successfully"
+        "success get all categories"
       );
     } catch (error) {
-      response.error(res, error, "failed find categories");
+      response.error(res, error, "failed get all categories");
     }
   },
 
@@ -75,7 +74,7 @@ export default {
     const { id } = req.params;
 
     if (!Types.ObjectId.isValid(id)) {
-      return response.notFound(res, "invalid category id");
+      return response.notFound(res, "category not found");
     }
 
     try {
@@ -83,10 +82,10 @@ export default {
       if (!category) {
         return response.notFound(res, "category not found");
       }
-      response.success(res, category, "category retrieved successfully");
+      response.success(res, category, "success get category");
     } catch (error) {
       console.log(error);
-      response.error(res, error, "failed find category");
+      response.error(res, error, "failed get category");
     }
   },
 
@@ -116,7 +115,7 @@ export default {
       if (!category) {
         return response.notFound(res, "category not found");
       }
-      response.success(res, category, "category updated successfully");
+      response.success(res, category, "success updated category");
     } catch (error) {
       response.error(res, error, "failed update category");
     }
@@ -134,7 +133,7 @@ export default {
       if (!category) {
         return response.notFound(res, "category not found");
       }
-      response.success(res, category, "category removed successfully");
+      response.success(res, category, "success removed category");
     } catch (error) {
       response.error(res, error, "failed remove category");
     }
