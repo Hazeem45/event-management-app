@@ -13,6 +13,11 @@ import {
   updateCategorySchema,
 } from "../validators/category.validator";
 import regionController from "../controllers/region.controller";
+import eventController from "../controllers/event.controller";
+import {
+  createEventSchema,
+  updateEventSchema,
+} from "../validators/event.validator";
 
 const router = Router();
 
@@ -48,6 +53,31 @@ router.delete(
   authMiddleware,
   aclMiddleware([USER_ROLES.ADMIN]),
   categoryController.remove
+);
+
+// event
+router.post(
+  "/event/create",
+  authMiddleware,
+  aclMiddleware([USER_ROLES.ADMIN]),
+  validate(createEventSchema),
+  eventController.createEvent
+);
+router.get("/event/find-all", eventController.findAllEvent);
+router.get("/event/find-one/:id", eventController.findEventById);
+router.get("/event/find-one/:slug/slug", eventController.findEventBySlug);
+router.put(
+  "/event/update/:id",
+  authMiddleware,
+  aclMiddleware([USER_ROLES.ADMIN]),
+  validate(updateEventSchema),
+  eventController.updateEvent
+);
+router.delete(
+  "/event/remove/:id",
+  authMiddleware,
+  aclMiddleware([USER_ROLES.ADMIN]),
+  eventController.removeEvent
 );
 
 // region
